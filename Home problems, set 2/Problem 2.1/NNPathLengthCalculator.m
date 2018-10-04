@@ -1,6 +1,6 @@
 clear all;
 restoredefaultpath;
-addpath('NN', 'helpers', 'TSPGraphics');
+addpath('helpers', 'TSPGraphics');
 
 debug = true;
 
@@ -8,9 +8,9 @@ cityLocations = LoadCityLocations();
 
 numberOfCities = size(cityLocations, 1);
 
-startCity = 1 + fix(rand * numberOfCities);
+startCity = RandomIndex(numberOfCities);
 nearestNeighbourPath = GetNearestNeighbourPath(startCity, cityLocations);
-nearestNeighbourPathLength = PathLength(nearestNeighbourPath, cityLocations);
+nearestNeighbourPathLength = GetPathLength(nearestNeighbourPath, cityLocations);
 
 fprintf('Nearest neighbour path length = %.2f (starting in city %d)\n', nearestNeighbourPathLength, startCity);
 

@@ -3,7 +3,7 @@ function iSelected = TournamentSelect(fitnessValues, tournamentSelectionParamete
     
     tournamentParticipants = zeros(1, tournamentSize);
     for i = 1:tournamentSize
-        tournamentParticipants(i) = SelectRandomIndividual(populationSize);
+        tournamentParticipants(i) = RandomIndex(populationSize);
     end
     
     sortedTournamentParticipants = SortByFitnessValue(tournamentParticipants, fitnessValues);
@@ -21,10 +21,6 @@ function iSelected = TournamentSelect(fitnessValues, tournamentSelectionParamete
     if selected == false
         iSelected = sortedTournamentParticipants(end);
     end
-end
-
-function iSelected = SelectRandomIndividual(populationSize)
-    iSelected = 1 + fix(rand * populationSize);
 end
 
 function sortedTournamentParticipants = SortByFitnessValue(tournamentParticipants, fitnessValues)

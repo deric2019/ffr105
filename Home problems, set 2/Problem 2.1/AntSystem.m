@@ -1,82 +1,58 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% Ant system (AS) for TSP.
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 clear all;
-clc;
+restoredefaultpath;
+addpath('ACO', 'helpers', 'TSPGraphics');
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Data
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-cityLocation = LoadCityLocations();
-numberOfCities = length(cityLocation);
+% Import data
+cityLocations = LoadCityLocations();
+numberOfCities = length(cityLocations);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Parameters
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-numberOfAnts = 20;  % To do: Set to appropriate value.
-alpha = 1.0;        % To do: Set to appropriate value.
-beta = 5.0;         % To do: Set to appropriate value.
-rho = 0.5;          % To do: set to appropriate value.
+% Define parameters
+numberOfAnts = numberOfCities;
+alpha = 1.0;
+beta = 2.0;
+rho = 0.5;
 
-% To do: Write the GetNearestNeighbourPathLength function
-% nearestNeighbourPathLength = GetNearestNeighbourPathLength(cityLocation); % To do: Write the GetNearestNeighbourPathLength function
-% tau0 = numberOfAnts/nearestNeighbourPathLength;
+nearestNeighbourPathLength = GetNearestNeighbourPathLength(cityLocations);
+tau0 = numberOfAnts / nearestNeighbourPathLength;
 
 targetPathLength = 123.0;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Initialization
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 range = [0 20 0 20];
-tspFigure = InitializeTspPlot(cityLocation, range);
-connection = InitializeConnections(cityLocation);
-pheromoneLevel = InitializePheromoneLevels(numberOfCities, tau0); % To do: Write the InitializePheromoneLevels
-visibility = GetVisibility(cityLocation);                         % To do: write the GetVisibility function
+tspFigure = InitializeTspPlot(cityLocations, range);
+connection = InitializeConnections(cityLocations);
+pheromoneLevel = InitializePheromoneLevels(numberOfCities, tau0);
+visibility = GetVisibility(cityLocations);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Main loop
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 minimumPathLength = inf;
+bestPath = [];
 
 iIteration = 0;
 
 while (minimumPathLength > targetPathLength)
  iIteration = iIteration + 1;
 
- %%%%%%%%%%%%%%%%%%%%%%%%%%
- % Generate paths:
- %%%%%%%%%%%%%%%%%%%%%%%%%%
-
+ % Generate paths
  pathCollection = [];
  pathLengthCollection = [];
  for k = 1:numberOfAnts
-  path = GeneratePath(pheromoneLevel, visibility, alpha, beta);   % To do: Write the GeneratePath function (and any necessary functions called by GeneratePath).
-  pathLength = GetPathLength(path,cityLocation);                  % To do: Write the GetPathLength function
+  path = GeneratePath(pheromoneLevel, visibility, alpha, beta);
+  pathLength = GetPathLength(path,cityLocations);
   if (pathLength < minimumPathLength)
     minimumPathLength = pathLength;
+    bestPath = path;
     disp(sprintf('Iteration %d, ant %d: path length = %.5f',iIteration,k,minimumPathLength));
-    PlotPath(connection,cityLocation,path);
+    PlotPath(connection,cityLocations,path);
   end
   pathCollection = [pathCollection; path];           
   pathLengthCollection = [pathLengthCollection; pathLength];
  end
 
- %%%%%%%%%%%%%%%%%%%%%%%%%%
  % Update pheromone levels
- %%%%%%%%%%%%%%%%%%%%%%%%%%
-
- deltaPheromoneLevel = ComputeDeltaPheromoneLevels(pathCollection,pathLengthCollection);  % To do: write the ComputeDeltaPheromoneLevels function
- pheromoneLevel = UpdatePheromoneLevels(pheromoneLevel,deltaPheromoneLevel,rho);          % To do: write the UpdatePheromoneLevels function
+ deltaPheromoneLevel = ComputeDeltaPheromoneLevels(pathCollection,pathLengthCollection);
+ pheromoneLevel = UpdatePheromoneLevels(pheromoneLevel,deltaPheromoneLevel,rho);
 
 end
 
-
-
-
-
-
-
+fprintf('bestPath = [%s];\n', sprintf('%d ', bestPath));

@@ -1,13 +1,13 @@
-function mutatedPath = Mutate(path, mutationProbability)
-    numberOfGenes = size(path, 2);
+function mutatedChromosome = Mutate(chromosome, mutationProbability)
+    numberOfGenes = size(chromosome, 2);
 
-    mutatedPath = path;
+    mutatedChromosome = chromosome;
     
     for i = 1:numberOfGenes
         if rand < mutationProbability
             iRandomGene = SelectRandomGene(numberOfGenes);
             % Swap the genes at indices i and iRandomGene.
-            mutatedPath([i iRandomGene]) = mutatedPath([iRandomGene i]);
+            mutatedChromosome([i iRandomGene]) = mutatedChromosome([iRandomGene i]);
         end
     end
 end
