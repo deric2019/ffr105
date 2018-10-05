@@ -10,7 +10,7 @@ tournamentSize = 2;
 mutationProbability = 1 / numberOfCities;
 elitismCount = 1;
 populationSize = 100;
-numberOfGenerations = 100000;
+numberOfGenerations = 1000;
 
 fitnessValues = zeros(populationSize, 1);
 

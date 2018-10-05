@@ -4,11 +4,11 @@ function visibility = GetVisibility(nodeLocations)
     visibility = zeros(numberOfNodes);
     
     for i = 1:numberOfNodes
-        for j = 1:numberOfNodes
-            if i ~= j
-                distance = DistanceBetweenNodes(j, i, nodeLocations);
-                visibility(i, j) = 1 / distance;
-            end
+        for j = i+1:numberOfNodes
+            distance = DistanceBetweenNodes(i, j, nodeLocations);
+            visibilityValue = 1 / distance;
+            visibility(i, j) = visibilityValue;
+            visibility(j, i) = visibilityValue;
         end
     end
 end

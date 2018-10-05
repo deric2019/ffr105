@@ -1,7 +1,7 @@
 function nearestNeighbourPath = GetNearestNeighbourPath(startNode, nodeLocations)
     numberOfNodes = size(nodeLocations, 1);
     
-    nearestNeighbourPath = zeros(1, numberOfNodes);
+    nearestNeighbourPath = zeros(1, numberOfNodes + 1);
     nearestNeighbourPath(1) = startNode;
 
     for i = 2:numberOfNodes
@@ -9,6 +9,8 @@ function nearestNeighbourPath = GetNearestNeighbourPath(startNode, nodeLocations
         nextNode = GetNearestNeighbour(currentNode, nearestNeighbourPath, nodeLocations);
         nearestNeighbourPath(i) = nextNode;
     end
+    
+    nearestNeighbourPath(end) = startNode;
 end
 
 function nearestNeighbour = GetNearestNeighbour(node, visitedNodes, nodeLocations)

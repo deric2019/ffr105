@@ -1,7 +1,7 @@
 function path = GeneratePath(pheromoneLevel, visibility, alpha, beta)
     numberOfNodes = size(pheromoneLevel, 1);
     
-    path = zeros(1, numberOfNodes);
+    path = zeros(1, numberOfNodes + 1);
     tabuList = zeros(1, numberOfNodes);
 
     startNode = GetRandomNode(numberOfNodes);
@@ -18,6 +18,8 @@ function path = GeneratePath(pheromoneLevel, visibility, alpha, beta)
         path(i) = node;
         tabuList(node) = 1;
     end
+    
+    path(end) = startNode;
 end
 
 function node = GetRandomNode(numberOfNodes)
