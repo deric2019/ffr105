@@ -1,6 +1,6 @@
 function deltaPheromoneLevel = ComputeDeltaPheromoneLevels(pathCollection,  pathLengthCollection)
     numberOfPaths = size(pathCollection, 1);
-    numberOfNodes = size(pathCollection(1, :), 2) - 1;
+    numberOfNodes = size(pathCollection, 2) - 1;
     
     deltaPheromoneLevel = zeros(numberOfNodes);
 
