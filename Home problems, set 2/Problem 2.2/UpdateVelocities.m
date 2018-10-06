@@ -1,4 +1,4 @@
-function updatedVelocities = UpdateVelocities(velocities, particles, bestParticlePositions, bestPosition, c1, c2, vMax)
+function updatedVelocities = UpdateVelocities(velocities, particles, bestParticlePositions, bestPosition, c1, c2, vMax, inertiaWeight)
     numberOfParticles = size(particles, 1);
     numberOfDimensions = size(particles, 2);
     
@@ -18,16 +18,12 @@ function updatedVelocities = UpdateVelocities(velocities, particles, bestParticl
             xPB = bestParticlePositions(i, j);
             xSB = bestPosition(j);
             
-            cognitiveComponent = c1 * q * (xPB - x);
-            socialComponent = c2 * r * (xSB - x);
+            cognitiveComponent = q * (xPB - x);
+            socialComponent = r * (xSB - x);
             
-            updatedVelocity = previousVelocity + cognitiveComponent + socialComponent;
+            updatedVelocity = inertiaWeight * previousVelocity + c1 * cognitiveComponent + c2 * socialComponent;
             
-            if abs(updatedVelocity) > vMax
-                updatedVelocity = sign(updatedVelocity) * vMax;
-            end
-            
-            updatedVelocities(i, j) = updatedVelocity;
+            updatedVelocities(i, j) = min(abs(updatedVelocity), vMax) * sign(updatedVelocity);
         end
     end
 end

@@ -6,12 +6,17 @@ debug = true;
 alpha = 1;
 xMin = -5;
 xMax = 5;
-vMax = xMax;
+vMax = xMax - xMin;
 numberOfDimensions = 2;
 c1 = 2;
 c2 = 2;
+initialInertiaWeight = 1.4;
+inertiaWeightMin = 0.4;
+beta = 0.99;
 numberOfParticles = 20; % Typically set to ~20-40
-numberOfIterations = 10000000;
+numberOfIterations = 500;
+
+inertiaWeight = initialInertiaWeight;
 
 % Initialize positions and velocities of particles
 particles = InitializeParticles(numberOfParticles, numberOfDimensions, xMin, xMax);
@@ -63,8 +68,12 @@ while iIteration < numberOfIterations
     end
 
     % Update particle velocities and positions
-    velocities = UpdateVelocities(velocities, particles, bestParticlePositions, bestPosition, c1, c2, vMax);
+    velocities = UpdateVelocities(velocities, particles, bestParticlePositions, bestPosition, c1, c2, vMax, inertiaWeight);
     particles = UpdatePositions(particles, velocities);
+    
+    % Update inertia weight
+    inertiaWeight = UpdateInertiaWeight(inertiaWeight, beta, inertiaWeightMin);
+    inertiaWeight = max([inertiaWeightMin inertiaWeight * beta]);
     
     if debug == true
         delete(particlePlot);
