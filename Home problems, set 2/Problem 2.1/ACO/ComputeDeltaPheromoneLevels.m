@@ -3,35 +3,28 @@ function deltaPheromoneLevel = ComputeDeltaPheromoneLevels(pathCollection,  path
     numberOfNodes = size(pathCollection, 2) - 1;
     
     deltaPheromoneLevel = zeros(numberOfNodes);
-
-    for i = 1:numberOfNodes
-        for j = i+1:numberOfNodes
-            delta = 0;
-            
-            for k = 1:numberOfPaths
-                path = pathCollection(k, :);
-            
-                if ContainsEdge(path, i, j)
-                    pathLength = pathLengthCollection(k);
-                    delta = delta + 1 / pathLength;
+    
+    for k = 1:numberOfPaths
+        path = pathCollection(k, :);
+        pathLength = pathLengthCollection(k);
+        
+        numberOfNodesInPath = size(path, 2);
+        traversedEdges = zeros(numberOfNodes);
+        
+        for i = 1:numberOfNodesInPath - 1
+            fromNode = path(i);
+            toNode = path(i + 1);
+            traversedEdges(fromNode, toNode) = 1;
+            traversedEdges(toNode, fromNode) = 1;
+        end
+        
+        for i = 1:numberOfNodes
+            for j = i+1:numberOfNodes
+                if traversedEdges(i, j) == 1
+                    deltaPheromoneLevel(i, j) = deltaPheromoneLevel(i, j) + 1 / pathLength;
+                    deltaPheromoneLevel(j, i) = deltaPheromoneLevel(i, j);
                 end
             end
-            
-            deltaPheromoneLevel(i, j) = delta;
-            deltaPheromoneLevel(j, i) = delta;
         end
     end
-end
-
-function containsEdge = ContainsEdge(path, i, j)
-    numberOfEdgesInPath = size(path, 2) - 1;
-
-    for k = 1:numberOfEdgesInPath
-        if i == path(k) && j == path(k + 1) || j == path(k) && i == path(k + 1)
-            containsEdge = true;
-            return;
-        end
-    end
-    
-    containsEdge = false;
 end
