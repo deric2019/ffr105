@@ -31,10 +31,11 @@ bestScore = inf;
 bestPosition = zeros(1, 2);
 
 if debug == true
-    figure;
+    fig = figure;
+    set(fig, 'DoubleBuffer', 'on');
+    hold on;
     xlim([xMin - 2 xMax + 2]);
     ylim([xMin - 2 xMax + 2]);
-    hold on;
     PlotLevelCurves(xMin - 2, xMax + 2, @EvaluateFunction);
     particlePlot = PlotParticles(particles);
     drawnow;
@@ -73,7 +74,6 @@ while iIteration < numberOfIterations
     
     % Update inertia weight
     inertiaWeight = UpdateInertiaWeight(inertiaWeight, beta, inertiaWeightMin);
-    inertiaWeight = max([inertiaWeightMin inertiaWeight * beta]);
     
     if debug == true
         delete(particlePlot);
