@@ -19,7 +19,7 @@ function [bestChromosome, minErrorFound] = LGPWrapper( ...
 
     % TODO:
     % - Remove magic constants
-    % - Fix CalculateDiversity
+    % - Fix CalculateDiversity, update minDiversity and maxDiversity
     % - Transfer changes from LGPWrapper to LGP24, remove LGPWrapper and
     % ParameterSearch
     
