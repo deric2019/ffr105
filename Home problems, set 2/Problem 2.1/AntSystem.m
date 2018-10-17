@@ -55,4 +55,4 @@ while (minimumPathLength > targetPathLength)
 
 end
 
-fprintf('bestPath = [%s];\n', sprintf('%d ', bestPath));
+fprintf('bestPath = %s;\n', mat2str(bestPath));

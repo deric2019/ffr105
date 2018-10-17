@@ -1,6 +1,6 @@
 clear all;
 
-debug = true;
+debug = false;
 
 % Define parameters
 alpha = 1;
@@ -80,3 +80,9 @@ for iIteration = 1:numberOfIterations
         drawnow;
     end
 end
+
+fprintf( ...
+    'Best result: %.6f, (x, y) = (%.6f, %.6f)\n', ...
+    bestScore, ...
+    bestPosition(1), ...
+    bestPosition(2));
