@@ -4,10 +4,7 @@ function updatedVelocities = UpdateVelocities(velocities, particles, bestParticl
     
     updatedVelocities = zeros(numberOfParticles, numberOfDimensions);
     
-    % TODO: Vectorize?
     for i = 1:numberOfParticles
-        % Question: Should I generate new values for q and r for each
-        % dimension?
         q = rand;
         r = rand;
         

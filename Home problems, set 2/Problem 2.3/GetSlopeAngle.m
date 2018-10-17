@@ -1,58 +1,52 @@
-%% This file provides the FORMAT you should use for the
-%% slopes in HP2.3. x denotes the horizontal distance
-%% travelled (by the truck) on a given slope, and
-%% alpha measures the slope angle at distance x
-%%
-%% iSlope denotes the slope index (i.e. 1,2,..10 for the
-%% training set etc.)
-%% iDataSet determines whether the slope under consideration
-%% belongs to the training set (iDataSet = 1), validation
-%% set (iDataSet = 2) or the test set (iDataSet = 3).
-%%
-%% Note that the slopes given below are just EXAMPLES.
-%% Please feel free to implement your own slopes below,
-%% as long as they fulfil the criteria given in HP2.3.
-%%
-%% You may remove the comments above and below, as they
-%% (or at least some of them) violate the coding standard 
-%%  a bit. :)
-%% The comments have been added as a clarification of the 
-%% problem that should be solved!).
-
-
 function alpha = GetSlopeAngle(x, iSlope, iDataSet)
-
-if (iDataSet == 1)                                % Training
- if (iSlope == 1) 
-   alpha = 4 + sin(x/100) + cos(sqrt(2)*x/50);    % You may modify this!
-
- %%
- %% Insert the remaining 8 training set slopes here
- %% 
-
- elseif (iSlope== 10)
-   alpha = 3 + 2*sin(x/50) + cos(sqrt(2)*x/100);  % You may modify this!
- end 
-elseif (iDataSet == 2)                            % Validation
- if (iSlope == 1) 
-   alpha = 6 - sin(x/100) + cos(sqrt(3)*x/50);    % You may modify this!
-
- %%
- %% Insert the remaining 3 validation set slopes here
- %% 
-
- elseif (iSlope == 5) 
-   alpha = 5 + sin(x/50) + cos(sqrt(5)*x/50);    % You may modify this!
- end 
-elseif (iDataSet == 3)                           % Test
- if (iSlope == 1) 
-   alpha = 6 - sin(x/100) - cos(sqrt(7)*x/50);   % You may modify this!
-
- %%
- %% Insert the remaining 3 test set slopes here
- %% 
-
- elseif (iSlope == 5)
-   alpha = 4 + (x/1000) + sin(x/70) + cos(sqrt(7)*x/100); % You may modify this!
- end
+    % Training
+    if iDataSet == 1
+        if iSlope == 1
+            alpha = 0.78704*cos(0.019435439357542116597087793766666*x + 1.0305) - 0.00049884246101134622165994917094628*x + 0.24799*sin(0.029840680606243267196438216362839*x + 4.7328) + 1.3832;
+        elseif iSlope == 2
+            alpha = 0.0017014624239680247569588537043474*x + 0.10295*cos(0.0088557565517100908689179770972424*x + 6.2254) + 0.6646*sin(0.0074154710455517555386153239226062*x + 2.5566) + 2.8755;
+        elseif iSlope == 3
+            alpha = 0.00021608445375643591339179512635344*x + 0.45143*cos(0.0094019601206459522681288595046295*x + 1.2102) + 0.062613*sin(0.0069075227758294726037285426439372*x + 5.6722) + 7.6383;
+        elseif iSlope == 4
+            alpha = x / 120 + sin(x / 50);
+        elseif iSlope == 5
+            alpha = 8 - (x / 150 + 0.5 * sin(x / 50));
+        elseif iSlope == 6
+            alpha = 1 / (1 + exp(-1 / 10 * (x - 750))) * 8 + 1 + 0.25 * sin(x / 25);
+        elseif iSlope == 7
+            alpha = -1 / (1 + exp(-1 / 50 * (x - 250))) * 6 + 8;
+        elseif iSlope == 8
+            alpha = 0.31233*sin(0.0089854202570908443958832398550113*x + 4.0251) - 0.00064323167828536047153513286400577*x + 2.5285*cos(0.004551671715229210808399654983284*x + 3.8114) + 4.2907;
+        elseif iSlope == 9
+            alpha = 5.4421 - 1.5836*cos(0.0056679767250203763763264482530729*x + 3.5251) - 0.77065*sin(0.012590890490729956876200069249898*x + 3.806) - 0.00006807351569374999625595663684375*x;
+        elseif iSlope == 10
+            alpha = 5.3806 - 2.72*cos(0.0090528295976831998493609154945516*x + 4.2693) - 1.3747*sin(0.010819126918095963491938127576981*x + 5.913) - 0.0026076367249125789787973057897358*x;
+        end
+    % Validation
+    elseif iDataSet == 2
+        if iSlope == 1
+            alpha = 2.2227*sin(0.0059324014717101571018557738283804*x + 2.3272) - 0.0018412072869829038379781776429932*x + 0.88032*cos(0.0051062612976031209469050950275227*x + 1.8496) + 4.0022;
+        elseif iSlope == 2
+            alpha = 0.11087*cos(0.010199647908154210516652965139643*x + 0.71873) - 0.00012537627614556115449785008522954*x + 1.9513*sin(0.0050578261260996978454672268040507*x + 0.86103) + 6.4137;
+        elseif iSlope == 3
+            alpha = 0.00025015232400389407119730381822751*x + 0.80156*sin(0.0051385877105536314399350482513386*x + 5.1977) + 0.88581*cos(0.007667617962468543597308972799892*x + 0.5729) + 3.7836;
+        elseif iSlope == 4
+            alpha = 0.57228*cos(0.0079644530531332556533678884403132*x + 4.6958) - 0.00019502002709413236418780935661235*x + 0.39501*sin(0.033637868166467081982212295313572*x + 4.6691) + 1.6547;
+        elseif iSlope == 5
+            alpha = 0.00018815880512836607635228416134121*x - 2.2356*cos(0.011494821008394667782430625881509*x + 2.3733) - 0.035623*sin(0.0046364963666096223063694796135573*x + 0.077245) + 5.0727;
+        end
+    % Test
+    elseif iDataSet == 3
+        if iSlope == 1
+            alpha = 4.5941 - 1.3073*cos(0.0078162676852826714127044051703047*x + 6.2242) - 1.4796*sin(0.039919203532051128515883851085403*x + 4.7538) - 0.00069415318933541912483664840071964*x;
+        elseif iSlope == 2
+            alpha = 0.0011043924781153586536660529189535*x - 0.05056*sin(0.0079340143891284961234405694718168*x + 0.79077) - 1.3694*cos(0.0076304191236616244857097510652065*x + 6.2562) + 6.0299;
+        elseif iSlope == 3
+            alpha = 0.00056327108643332861499919931015064*x + 0.16655*cos(0.0052795996796338914398154674319974*x + 4.7761) + 0.090591*sin(0.025066300364464007299306666131919*x + 4.0226) + 6.522;
+        elseif iSlope == 4
+            alpha = 0.83372*cos(0.018140227587295310206961856543452*x + 4.5655) - 0.0003073566269700215103535384969554*x + 0.48606*sin(0.01500141013255245993123353595238*x + 5.0725) + 1.8031;
+        elseif iSlope == 5
+            alpha = 0.00013028028435235423313539632597873*x + 0.0034255*cos(0.0084071763657458006154053099725926*x + 4.9627) + 0.20509*sin(0.0077584033205966212153538801714607*x + 5.2387) + 8.9008;
+        end
+    end
 end

@@ -1,7 +1,6 @@
 function velocities = InitializeVelocities(numberOfParticles, numberOfDimensions, alpha, xMin, xMax)
     velocities = zeros(numberOfParticles, numberOfDimensions);
     
-    % TODO: Vectorize?
     for i = 1:numberOfParticles
         for j = 1:numberOfDimensions
             r = rand;

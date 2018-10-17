@@ -22,7 +22,8 @@ function [bestChromosome, minErrorFound] = LGPWrapper( ...
     % - Fix CalculateDiversity, update minDiversity and maxDiversity
     % - Transfer changes from LGPWrapper to LGP24, remove LGPWrapper and
     % ParameterSearch
-    
+    % - Make sure program plots/prints what it should, and not any
+    % unneccessary stuff
     
     numberOfRegisters = numberOfVariableRegisters + length(constants);
 
