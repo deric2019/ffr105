@@ -13,14 +13,15 @@ c2 = 2;
 initialInertiaWeight = 1.4;
 inertiaWeightMin = 0.4;
 beta = 0.99;
-numberOfParticles = 20; % Typically set to ~20-40
+numberOfParticles = 20;
 numberOfIterations = 500;
-
-inertiaWeight = initialInertiaWeight;
 
 % Initialize positions and velocities of particles
 particles = InitializeParticles(numberOfParticles, numberOfDimensions, xMin, xMax);
 velocities = InitializeVelocities(numberOfParticles, numberOfDimensions, alpha, xMin, xMax);
+
+% Run optimization
+inertiaWeight = initialInertiaWeight;
 
 scores = zeros(numberOfParticles, 1);
 
@@ -41,9 +42,7 @@ if debug == true
     drawnow;
 end
 
-% TODO: Better ending criteria?
-iIteration = 1;
-while iIteration < numberOfIterations
+for iIteration = 1:numberOfIterations
     for i = 1:numberOfParticles
         % Evaluate each particle
         particle = particles(i, :);
@@ -80,6 +79,4 @@ while iIteration < numberOfIterations
         particlePlot = PlotParticles(particles);
         drawnow;
     end
-    
-    iIteration = iIteration + 1;
 end
