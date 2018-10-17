@@ -1,3 +1,3 @@
-function acceleration = CalculateAcceleration(mass, gravityForce, foundationBreakForce, engineBreakForce)
-    acceleration = (gravityForce - foundationBreakForce - engineBreakForce) / mass;
+function acceleration = CalculateAcceleration(mass, gravityForce, foundationBrakeForce, engineBrakeForce)
+    acceleration = (gravityForce - foundationBrakeForce - engineBrakeForce) / mass;
 end

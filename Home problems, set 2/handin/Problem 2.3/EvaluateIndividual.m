@@ -2,7 +2,7 @@ function [fitness, totalDistance, averageVelocity] = EvaluateIndividual(network,
     slopeLength = 1000;
     minVelocity = 1;
     maxVelocity = 25;
-    maxBreakTemperature = 750;
+    maxBrakeTemperature = 750;
     
     numberOfSlopes = GetNumberOfSlopes(iDataSet);
 
@@ -11,7 +11,7 @@ function [fitness, totalDistance, averageVelocity] = EvaluateIndividual(network,
     totalTime = 0;
         
     for iSlope = 1:numberOfSlopes
-        [times, positions] = RunSimulation(network, iDataSet, iSlope, slopeLength, minVelocity, maxVelocity, maxBreakTemperature);
+        [times, positions] = RunSimulation(network, iDataSet, iSlope, slopeLength, minVelocity, maxVelocity, maxBrakeTemperature);
 
         timeUntilTermination = times(end);
         distanceTravelled = positions(end);

@@ -7,7 +7,7 @@ iTestDataSet = 3;
 
 % NN parameters
 layerSizes = [3 7 2];
-initialWeightRange = [-10 10];
+initialWeightRange = [-1 1];
 mutationWeightRange = [-10 10];
 
 % We take number of neurons + 1 in order to account for the bias term
