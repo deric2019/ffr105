@@ -28,6 +28,6 @@ function PlotAllSlopes(iDataSet)
     numberOfSlopes = GetNumberOfSlopes(iDataSet);
 
     for iSlope = 1:numberOfSlopes
-        fplot(@(x) GetSlopeAngle(x, iDataSet, iSlope));
+        fplot(@(x) GetSlopeAngle(x, iSlope, iDataSet));
     end
 end

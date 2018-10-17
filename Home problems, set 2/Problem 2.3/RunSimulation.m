@@ -3,7 +3,7 @@ function [times, positions, velocities, breakPressures, gears, breakTemperatures
     MAX_SLOPE_ANGLE = 10; % degrees
     MASS = 20000; % kg
     NUMBER_OF_GEARS = 10;
-    GEAR_CHANGE_COOLDOWN = 1; % s
+    GEAR_CHANGE_COOLDOWN = 2; % s
     AMBIENT_BREAK_TEMPERATURE = 283; % K
     BREAK_COOLDOWN_TIME = 30; % s
     BREAK_HEATING_RATE = 40; % K/s

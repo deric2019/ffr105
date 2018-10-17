@@ -9,7 +9,7 @@ function network = DecodeChromosome(chromosome, layerSizes)
     expectedLength = numberOfInputWeights + numberOfOutputWeights;
     
     if chromosomeLength ~= expectedLength
-        error('Invalid chromosome length. Expected %d, got %d', expectedLength, actualLength);
+        error('Invalid chromosome length. Expected %d, got %d', expectedLength, chromosomeLength);
     end
     
     inputWeights = chromosome(1:numberOfInputWeights);
