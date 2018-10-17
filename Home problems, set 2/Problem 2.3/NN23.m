@@ -1,24 +1,18 @@
 clear all;
 
-rng(2018101702);
-
-debug = true;
-
 % Data sets
 iTrainingDataSet = 1;
 iValidationDataSet = 2;
 iTestDataSet = 3;
 
 % NN parameters
-numberOfInputs = 3;
-numberOfHiddenNeurons = 7;
-numberOfOutputs = 2;
+layerSizes = [3 7 2];
 initialWeightRange = [-10 10];
 mutationWeightRange = [-10 10];
 
 % We take number of neurons + 1 in order to account for the bias term
-numberOfInputWeights = (numberOfInputs + 1) * numberOfHiddenNeurons;
-numberOfOutputWeights = (numberOfHiddenNeurons + 1) * numberOfOutputs;
+numberOfInputWeights = (layerSizes(1) + 1) * layerSizes(2);
+numberOfOutputWeights = (layerSizes(2) + 1) * layerSizes(3);
 
 % GA parameters
 chromosomeLength = numberOfInputWeights + numberOfOutputWeights;
@@ -37,6 +31,19 @@ maxHoldoutCount = 25;
 population = InitializePopulation(populationSize, chromosomeLength, initialWeightRange);
 fitnessValues = zeros(populationSize, 1);
 
+% Setup plots
+fitnessFigure = figure;
+hold on;
+set(fitnessFigure, 'DoubleBuffer', 'on');
+axis([1 maxNumberOfGenerations 0 1]);
+xlabel('Generation');
+ylabel('Fitness');
+trainingFitnessPlot = plot(1:maxNumberOfGenerations, zeros(1, maxNumberOfGenerations));
+validationFitnessPlot = plot(1:maxNumberOfGenerations, zeros(1, maxNumberOfGenerations));
+legend('Training', 'Validation');
+drawnow;
+
+% Do optimization
 bestTrainingChromosome = zeros(1, chromosomeLength);
 bestValidationChromosome = zeros(1, chromosomeLength);
 maxTrainingFitnessFound = -1;
@@ -45,27 +52,14 @@ maxValidationFitnessFound = -1;
 iGeneration = 1;
 holdoutCount = 0;
 
-if debug == true
-    fitnessFigure = figure;
-    hold on;
-    set(fitnessFigure, 'DoubleBuffer', 'on');
-    axis([1 maxNumberOfGenerations 0 1]);
-    xlabel('Generation');
-    ylabel('Fitness');
-    trainingFitnessPlot = plot(1:maxNumberOfGenerations, zeros(1, maxNumberOfGenerations));
-    validationFitnessPlot = plot(1:maxNumberOfGenerations, zeros(1, maxNumberOfGenerations));
-    legend('Training', 'Validation');
-    drawnow;
-end
-
 while holdoutCount < maxHoldoutCount && iGeneration <= maxNumberOfGenerations
     fprintf('Running generation %d ...\n', iGeneration);
     
-    % Evaluate all individuals
+    % Evaluate all individuals, save the best one
     for i = 1:populationSize
         chromosome = population(i, :);
 
-        network = DecodeChromosome(chromosome, numberOfInputs, numberOfHiddenNeurons, numberOfOutputs);
+        network = DecodeChromosome(chromosome, layerSizes);
         [trainingFitness, trainingTotalDistance, trainingAverageVelocity] = EvaluateIndividual(network, iTrainingDataSet);
         fitnessValues(i) = trainingFitness;
         
@@ -136,22 +130,19 @@ while holdoutCount < maxHoldoutCount && iGeneration <= maxNumberOfGenerations
     % Replace population
     population = tempPopulation;
     
-    if debug == true
-        plotVector = get(trainingFitnessPlot, 'YData');
-        plotVector(iGeneration) = maxTrainingFitnessFound;
-        set(trainingFitnessPlot, 'YData', plotVector);
-
-        plotVector = get(validationFitnessPlot, 'YData');
-        plotVector(iGeneration) = validationFitness;
-        set(validationFitnessPlot, 'YData', plotVector);
-
-        drawnow;
-    end
+    % Update plots
+    plotVector = get(trainingFitnessPlot, 'YData');
+    plotVector(iGeneration) = maxTrainingFitnessFound;
+    set(trainingFitnessPlot, 'YData', plotVector);
+    plotVector = get(validationFitnessPlot, 'YData');
+    plotVector(iGeneration) = validationFitness;
+    set(validationFitnessPlot, 'YData', plotVector);
+    drawnow;
     
     iGeneration = iGeneration + 1;
 end
 
-bestNetwork = DecodeChromosome(bestValidationChromosome, numberOfInputs, numberOfHiddenNeurons, numberOfOutputs);
+bestNetwork = DecodeChromosome(bestValidationChromosome, layerSizes);
 [validationTestFitness, validationTestTotalDistance, validationTestAverageVelocity] = EvaluateIndividual(bestNetwork, iTestDataSet);
 fprintf( ...
     'Test results for best individual found during validation: fitness=%.5f, totalDistance=%.5f, averageVelocity=%.5f\n', ...

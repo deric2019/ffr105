@@ -1,18 +1,21 @@
-function network = DecodeChromosome(chromosome, numberOfInputs, numberOfHiddenNeurons, numberOfOutputs)
-    numberOfInputNeurons = numberOfInputs + 1;
-    numberOfHiddenNeuronsPlusBias = numberOfHiddenNeurons + 1;
+function network = DecodeChromosome(chromosome, layerSizes)
+    numberOfInputNeurons = layerSizes(1) + 1;
+    numberOfHiddenNeurons = layerSizes(2) + 1;
     
-    numberOfInputWeights = numberOfInputNeurons * numberOfHiddenNeurons;
-    numberOfOutputWeights = numberOfHiddenNeuronsPlusBias * numberOfOutputs;
+    numberOfInputWeights = numberOfInputNeurons * layerSizes(2);
+    numberOfOutputWeights = numberOfHiddenNeurons * layerSizes(3);
     
-    if length(chromosome) ~= numberOfInputWeights + numberOfOutputWeights
-        error('Invalid chromosome length. Expected %d, got %d', numberOfInputWeights + numberOfOutputWeights, length(chromosome));
+    chromosomeLength = length(chromosome);
+    expectedLength = numberOfInputWeights + numberOfOutputWeights;
+    
+    if chromosomeLength ~= expectedLength
+        error('Invalid chromosome length. Expected %d, got %d', expectedLength, actualLength);
     end
     
     inputWeights = chromosome(1:numberOfInputWeights);
-    inputWeights = reshape(inputWeights, numberOfInputNeurons, numberOfHiddenNeurons)';
-    outputWeights = chromosome(end - numberOfOutputWeights + 1:end);
-    outputWeights = reshape(outputWeights, numberOfHiddenNeuronsPlusBias, numberOfOutputs)';
+    inputWeights = reshape(inputWeights, numberOfInputNeurons, layerSizes(2))';
+    outputWeights = chromosome(numberOfInputWeights + 1:end);
+    outputWeights = reshape(outputWeights, numberOfHiddenNeurons, layerSizes(3))';
     
     network = struct( ...
         'InputWeights', inputWeights, ...

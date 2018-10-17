@@ -17,13 +17,7 @@ function [fitness, totalDistance, averageVelocity] = EvaluateIndividual(network,
         distanceTravelled = positions(end);
         averageVelocity = distanceTravelled / timeUntilTermination;
 
-%         slopeFitness = distanceTravelled / slopeLength;
-%         slopeFitness = (averageVelocity / maxVelocity) * (distanceTravelled / slopeLength);
-%         slopeFitness = (averageVelocity / maxVelocity + distanceTravelled / slopeLength) / 2;
-%         slopeFitness = (averageVelocity / maxVelocity + distanceTravelled / slopeLength * 10) / 11;
-%         slopeFitness = min(averageVelocity / maxVelocity, distanceTravelled / slopeLength);
-
-        distanceFitnessRatio = 0.80;
+        distanceFitnessRatio = 0.90;
         velocityFitnessRatio = 1 - distanceFitnessRatio;
     
         distanceFitness = distanceTravelled / slopeLength * distanceFitnessRatio;
