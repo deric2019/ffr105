@@ -1,4 +1,6 @@
-function yEstimate = EvaluateChromosome(chromosome, x, numberOfRegisters, constants)
+function yEstimate = EvaluateChromosome(chromosome, x, numberOfRegisters, constants, divisionByZeroConstant)
+    DIVISION_BY_ZERO_CONSTANT = 10000;
+
     chromosomeLength = length(chromosome);
     numberOfConstants = length(constants);
 
@@ -25,7 +27,7 @@ function yEstimate = EvaluateChromosome(chromosome, x, numberOfRegisters, consta
             operationResult = operand1 * operand2;
         elseif operator == 4
             if operand2 == 0
-                operationResult = 10000;
+                operationResult = divisionByZeroConstant;
             else
                 operationResult = operand1 / operand2;
             end

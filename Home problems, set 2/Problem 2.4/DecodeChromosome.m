@@ -1,8 +1,6 @@
-function fn = DecodeChromosome(chromosome, numberOfRegisters, constants)
+function fn = DecodeChromosome(chromosome, numberOfRegisters, constants, divisionByZeroConstant)
     chromosomeLength = length(chromosome);
     numberOfConstants = length(constants);
-    
-    operatorStrings = ['+', '-', '*', '/'];
     
     registers = [];
     for i = 1:numberOfRegisters - numberOfConstants
@@ -30,15 +28,13 @@ function fn = DecodeChromosome(chromosome, numberOfRegisters, constants)
             operationResult = operand1 * operand2;
         elseif operator == 4
             if isAlways(operand2 == 0)
-                operationResult = sym(10000);
+                operationResult = sym(divisionByZeroConstant);
             else
                 operationResult = operand1 / operand2;
             end
         else
             error('Invalid operator %s', operator);
         end
-        
-        fprintf('Instruction %d: %s %s %s => %s\n', i, operand1, operatorStrings(operator), operand2, operationResult);
         
         registers(destinationRegister) = operationResult;
     end
