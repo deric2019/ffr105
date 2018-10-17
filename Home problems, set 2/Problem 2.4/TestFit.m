@@ -15,7 +15,7 @@ fn = (x^3 - x^2 + 1)/(x^4 - x^2 + 1); % Generated with the DecodeChromosome func
 figure;
 hold on;
 xlabel('x');
-ylabel('y');
+ylabel('g(x)');
 
 PlotData(data);
 fplot(fn);
