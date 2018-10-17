@@ -1,22 +1,22 @@
-function [times, positions, velocities, breakPressures, gears, breakTemperatures] = RunSimulation(network, iDataSet, iSlope, slopeLength, minVelocity, maxVelocity, maxBreakTemperature)
+function [times, positions, velocities, brakePressures, gears, brakeTemperatures] = RunSimulation(network, iDataSet, iSlope, slopeLength, minVelocity, maxVelocity, maxBrakeTemperature)
     % Define constants
     MAX_SLOPE_ANGLE = 10; % degrees
     MASS = 20000; % kg
     NUMBER_OF_GEARS = 10;
     GEAR_CHANGE_COOLDOWN = 2; % s
-    AMBIENT_BREAK_TEMPERATURE = 283; % K
-    BREAK_COOLDOWN_TIME = 30; % s
-    BREAK_HEATING_RATE = 40; % K/s
-    ENGINE_BREAK_CONSTANT = 3000; % N
+    AMBIENT_BRAKE_TEMPERATURE = 283; % K
+    BRAKE_COOLDOWN_TIME = 30; % s
+    BRAKE_HEATING_RATE = 40; % K/s
+    ENGINE_BRAKE_CONSTANT = 3000; % N
     GEAR_COEFFICIENTS = [7.0 5.0 4.0 3.0 2.5 2.0 1.6 1.4 1.2 1];
     DELTA_T = 0.1; % s
 
     % Define initial state
     position = 0; % m
     velocity = 20; % m/s
-    breakPressure = 0.0;
-    breakTemperature = 500; % K
-    deltaBreakTemperature = breakTemperature - AMBIENT_BREAK_TEMPERATURE; % K
+    brakePressure = 0.0;
+    brakeTemperature = 500; % K
+    deltaBrakeTemperature = brakeTemperature - AMBIENT_BRAKE_TEMPERATURE; % K
     gear = 7;
     
     time = 0;
@@ -26,9 +26,9 @@ function [times, positions, velocities, breakPressures, gears, breakTemperatures
     times = [];
     positions = [];
     velocities = [];
-    breakPressures = [];
+    brakePressures = [];
     gears = [];
-    breakTemperatures = [];
+    brakeTemperatures = [];
     
     iIteration = 1;
 
@@ -39,27 +39,27 @@ function [times, positions, velocities, breakPressures, gears, breakTemperatures
 
         % Calculate acceleration in current position
         gravityForce = CalculateGravityForce(MASS, slopeAngle);
-        foundationBreakForce = CalculateFoundationBreakForce(MASS, breakPressure, breakTemperature, maxBreakTemperature);
-        engineBreakForce = CalculateEngineBreakForce(gear, ENGINE_BREAK_CONSTANT, GEAR_COEFFICIENTS);
+        foundationBrakeForce = CalculateFoundationBrakeForce(MASS, brakePressure, brakeTemperature, maxBrakeTemperature);
+        engineBrakeForce = CalculateEngineBrakeForce(gear, ENGINE_BRAKE_CONSTANT, GEAR_COEFFICIENTS);
 
-        acceleration = CalculateAcceleration(MASS, gravityForce, foundationBreakForce, engineBreakForce);
+        acceleration = CalculateAcceleration(MASS, gravityForce, foundationBrakeForce, engineBrakeForce);
         
         % Add current state to historical state
         times = [times time];
         positions = [positions position];
         velocities = [velocities velocity];
-        breakPressures = [breakPressures breakPressure];
+        brakePressures = [brakePressures brakePressure];
         gears = [gears gear];
-        breakTemperatures = [breakTemperatures breakTemperature];
+        brakeTemperatures = [brakeTemperatures brakeTemperature];
         
         % Get input from neural network
         networkInput = [
             velocity / maxVelocity;
             slopeAngle / MAX_SLOPE_ANGLE;
-            breakTemperature / maxBreakTemperature;
+            brakeTemperature / maxBrakeTemperature;
         ];
         networkOutput = RunNeuralNetwork(network, networkInput);
-        breakPressure = networkOutput(1);
+        brakePressure = networkOutput(1);
         gearChange = networkOutput(2);
         
         % Perform gearchange
@@ -79,12 +79,12 @@ function [times, positions, velocities, breakPressures, gears, breakTemperatures
         % Calculate next velocity
         velocity = GetNextVelocity(velocity, acceleration, DELTA_T);
 
-        % Calculate next break temperature
-        deltaBreakTemperature = GetNextDeltaBreakTemperature(breakPressure, deltaBreakTemperature, BREAK_COOLDOWN_TIME, BREAK_HEATING_RATE, DELTA_T);
-        breakTemperature = GetNextBreakTemperature(AMBIENT_BREAK_TEMPERATURE, deltaBreakTemperature);
+        % Calculate next brake temperature
+        deltaBrakeTemperature = GetNextDeltaBrakeTemperature(brakePressure, deltaBrakeTemperature, BRAKE_COOLDOWN_TIME, BRAKE_HEATING_RATE, DELTA_T);
+        brakeTemperature = GetNextBrakeTemperature(AMBIENT_BRAKE_TEMPERATURE, deltaBrakeTemperature);
         
         % Check constraints
-        if velocity < minVelocity || velocity > maxVelocity || breakTemperature > maxBreakTemperature
+        if velocity < minVelocity || velocity > maxVelocity || brakeTemperature > maxBrakeTemperature
             break;
         end
         
@@ -97,7 +97,7 @@ function [times, positions, velocities, breakPressures, gears, breakTemperatures
     times = [times time];
     positions = [positions position];
     velocities = [velocities velocity];
-    breakPressures = [breakPressures breakPressure];
+    brakePressures = [brakePressures brakePressure];
     gears = [gears gear];
-    breakTemperatures = [breakTemperatures breakTemperature];
+    brakeTemperatures = [brakeTemperatures brakeTemperature];
 end

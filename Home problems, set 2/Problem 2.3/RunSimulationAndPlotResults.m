@@ -2,9 +2,9 @@ function RunSimulationAndPlotResults(network, iSlope, iDataSet)
     slopeLength = 1000;
     minVelocity = 1;
     maxVelocity = 25;
-    maxBreakTemperature = 750;
+    maxBrakeTemperature = 750;
 
-    [~, positions, velocities, breakPressures, gears, breakTemperatures] = RunSimulation(network, iDataSet, iSlope, slopeLength, minVelocity, maxVelocity, maxBreakTemperature);
+    [~, positions, velocities, brakePressures, gears, brakeTemperatures] = RunSimulation(network, iDataSet, iSlope, slopeLength, minVelocity, maxVelocity, maxBrakeTemperature);
 
     figure;
 
@@ -22,9 +22,9 @@ function RunSimulationAndPlotResults(network, iSlope, iDataSet)
 
     subplot(3, 2, 3);
     hold on;
-    title('Break pedal pressure');
+    title('Brake pedal pressure');
     axis([0 1000 0 1]);
-    plot(positions, breakPressures);
+    plot(positions, brakePressures);
 
     subplot(3, 2, 4);
     hold on;
@@ -34,7 +34,7 @@ function RunSimulationAndPlotResults(network, iSlope, iDataSet)
 
     subplot(3, 2, 5);
     hold on;
-    title('Break temperature');
+    title('Brake temperature');
     axis([0 1000 283 750]);
-    plot(positions, breakTemperatures);
+    plot(positions, brakeTemperatures);
 end
