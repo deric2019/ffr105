@@ -1,4 +1,4 @@
-function diversity = CalculateDiversity(population, numberOfRegisters, numberOfVariableRegisters, numberOfOperators)
+function diversity = CalculateDiversity(population)
     populationSize = length(population);
 
     totalDistance = 0;
@@ -10,7 +10,7 @@ function diversity = CalculateDiversity(population, numberOfRegisters, numberOfV
             chromosome1 = individual1.Chromosome;
             chromosome2 = individual2.Chromosome;
             
-            distance = CalculateDistance(chromosome1, chromosome2, numberOfRegisters, numberOfVariableRegisters, numberOfOperators);
+            distance = CalculateDistance(chromosome1, chromosome2);
 
             totalDistance = totalDistance + distance;
         end
@@ -19,7 +19,7 @@ function diversity = CalculateDiversity(population, numberOfRegisters, numberOfV
     diversity = 2 / (populationSize * (populationSize - 1)) * totalDistance;
 end
 
-function distance = CalculateDistance(chromosome1, chromosome2, numberOfRegisters, numberOfVariableRegisters, numberOfOperators)
+function distance = CalculateDistance(chromosome1, chromosome2)
     maxLength = max(length(chromosome1), length(chromosome2));
 
     totalDiff = 0;
@@ -34,15 +34,10 @@ function distance = CalculateDistance(chromosome1, chromosome2, numberOfRegister
             gene2 = chromosome2(k);
         end
         
-        diff = abs(gene1 - gene2);
-        
-        m = mod(k, 4);
-        if m == 1
-            diff = diff / numberOfVariableRegisters;
-        elseif m == 2
-            diff = diff / numberOfOperators;
-        else % m == 3 || m == 0
-            diff = diff / numberOfRegisters;
+        if gene1 == gene2
+            diff = 0;
+        else
+            diff = 1;
         end
         
         totalDiff = totalDiff + diff;

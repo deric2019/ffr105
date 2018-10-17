@@ -1,6 +1,4 @@
 function yEstimate = EvaluateChromosome(chromosome, x, numberOfRegisters, constants, divisionByZeroConstant)
-    DIVISION_BY_ZERO_CONSTANT = 10000;
-
     chromosomeLength = length(chromosome);
     numberOfConstants = length(constants);
 

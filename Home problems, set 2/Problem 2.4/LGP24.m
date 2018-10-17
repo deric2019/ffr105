@@ -1,13 +1,5 @@
 clear all;
 
-% TODO:
-% - Remove magic constants
-% - Fix CalculateDiversity, update minDiversity and maxDiversity
-% - Make sure program plots/prints what it should, and not any
-% unneccessary stuff
-
-debug = true;
-
 % Load function data
 data = LoadFunctionData();
 
@@ -25,53 +17,53 @@ divisionByZeroConstant = 10000;
 tournamentSize = 5;
 tournamentSelectionParameter = 0.75;
 crossoverProbability = 0.20;
-mutationProbability = 0.02;
 mutationVariationFactor = 1.1;
-minDiversity = 0.25;
-maxDiversity = 0.25;
+minDiversity = 0.60;
+maxDiversity = 0.60;
 elitismCount = 1;
 populationSize = 100;
-numberOfGenerations = 100;
+numberOfGenerations = 1000;
 
 % Initialize population
 population = InitializePopulation(populationSize, minNumberOfInstructions, maxNumberOfInstructions, numberOfRegisters, numberOfVariableRegisters, numberOfOperators);
 
-if debug == true
-    fig = figure;
-    set(fig, 'DoubleBuffer', 'on');
-    
-    subplot(2, 2, 1);
-    hold on;
-    xlabel('x');
-    ylabel('y');
-    axis([-5 5 -1.5 1.5]);
-    PlotData(data);
-    xValues = -5:0.1:5;
-    functionPlot = plot(xValues, zeros(1, length(xValues)));
-    
-    subplot(2, 2, 2);
-    hold on;
-    xlabel('Generation');
-    ylabel('Error');
-    axis([1 numberOfGenerations 0 1]);
-    errorPlot = plot(1:numberOfGenerations, zeros(1, numberOfGenerations));
-    
-    subplot(2, 2, 3);
-    hold on;
-    xlabel('Generation');
-    ylabel('Mutation rate');
-    axis([1 numberOfGenerations 0 0.1]);
-    mutationRatePlot = plot(1:numberOfGenerations, zeros(1, numberOfGenerations));
+mutationProbability = 1 / mean(arrayfun(@(x) length(x.Chromosome), population));
 
-    subplot(2, 2, 4);
-    hold on;
-    xlabel('Generation');
-    ylabel('Population diversity');
-    axis([1 numberOfGenerations 0 1]);
-    diversityPlot = plot(1:numberOfGenerations, zeros(1, numberOfGenerations));
+% Setup plots
+fig = figure;
+set(fig, 'DoubleBuffer', 'on');
 
-    drawnow;
-end
+subplot(2, 2, 1);
+hold on;
+xlabel('x');
+ylabel('y');
+axis([-5 5 -1.5 1.5]);
+PlotData(data);
+xValues = -5:0.1:5;
+functionPlot = plot(xValues, zeros(1, length(xValues)));
+
+subplot(2, 2, 2);
+hold on;
+xlabel('Generation');
+ylabel('Error');
+axis([1 numberOfGenerations 0 1]);
+errorPlot = plot(1:numberOfGenerations, zeros(1, numberOfGenerations));
+
+subplot(2, 2, 3);
+hold on;
+xlabel('Generation');
+ylabel('Mutation rate');
+axis([1 numberOfGenerations 0 0.1]);
+mutationRatePlot = plot(1:numberOfGenerations, zeros(1, numberOfGenerations));
+
+subplot(2, 2, 4);
+hold on;
+xlabel('Generation');
+ylabel('Population diversity');
+axis([1 numberOfGenerations 0 1]);
+diversityPlot = plot(1:numberOfGenerations, zeros(1, numberOfGenerations));
+
+drawnow;
 
 % Run optimization
 fitnessValues = zeros(populationSize, 1);
@@ -145,7 +137,7 @@ for iGeneration = 1:numberOfGenerations
     population = tempPopulation;
 
     % Calculate diversity and update mutation rate
-    diversity = CalculateDiversity(population, numberOfRegisters, numberOfVariableRegisters, numberOfOperators);
+    diversity = CalculateDiversity(population);
 
     if diversity < minDiversity
         mutationProbability = mutationProbability * mutationVariationFactor;
@@ -153,38 +145,37 @@ for iGeneration = 1:numberOfGenerations
         mutationProbability = mutationProbability / mutationVariationFactor;
     end
 
-    if debug == true
-        if foundNewBestIndividual == true
-            chromosome = bestIndividual.Chromosome;
-            
-            plotVector = get(functionPlot, 'YData');
-            for i = 1:length(xValues)
-                x = xValues(i);
-                plotVector(i) = EvaluateChromosome(chromosome, x, numberOfRegisters, constants, divisionByZeroConstant);
-            end
-            set(functionPlot, 'YData', plotVector);
-            fprintf( ...
-                'Generation %d: fitness = %.5f, error = %.5f, # of instructions = %d\n', ...
-                iGeneration, ...
-                maxFitnessFound, ...
-                minErrorFound, ...
-                length(chromosome) / GENES_PER_INSTRUCTION);
+    % Update plots
+    if foundNewBestIndividual == true
+        chromosome = bestIndividual.Chromosome;
+
+        plotVector = get(functionPlot, 'YData');
+        for i = 1:length(xValues)
+            x = xValues(i);
+            plotVector(i) = EvaluateChromosome(chromosome, x, numberOfRegisters, constants, divisionByZeroConstant);
         end
-        
-        plotVector = get(errorPlot, 'YData');
-        plotVector(iGeneration) = minErrorFound;
-        set(errorPlot, 'YData', plotVector);
-        
-        plotVector = get(mutationRatePlot, 'YData');
-        plotVector(iGeneration) = mutationProbability;
-        set(mutationRatePlot, 'YData', plotVector);
-
-        plotVector = get(diversityPlot, 'YData');
-        plotVector(iGeneration) = diversity;
-        set(diversityPlot, 'YData', plotVector);
-
-        drawnow;
+        set(functionPlot, 'YData', plotVector);
+        fprintf( ...
+            'Generation %d: fitness = %.5f, error = %.5f, # of instructions = %d\n', ...
+            iGeneration, ...
+            maxFitnessFound, ...
+            minErrorFound, ...
+            length(chromosome) / GENES_PER_INSTRUCTION);
     end
+
+    plotVector = get(errorPlot, 'YData');
+    plotVector(iGeneration) = minErrorFound;
+    set(errorPlot, 'YData', plotVector);
+
+    plotVector = get(mutationRatePlot, 'YData');
+    plotVector(iGeneration) = mutationProbability;
+    set(mutationRatePlot, 'YData', plotVector);
+
+    plotVector = get(diversityPlot, 'YData');
+    plotVector(iGeneration) = diversity;
+    set(diversityPlot, 'YData', plotVector);
+
+    drawnow;
 end
 
 % Print best solution
