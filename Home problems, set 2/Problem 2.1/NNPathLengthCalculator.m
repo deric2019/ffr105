@@ -2,7 +2,7 @@ clear all;
 restoredefaultpath;
 addpath('helpers', 'TSPGraphics');
 
-debug = true;
+debug = false;
 
 cityLocations = LoadCityLocations();
 

@@ -15,7 +15,7 @@ rho = 0.5;
 nearestNeighbourPathLength = GetNearestNeighbourPathLength(cityLocations);
 tau0 = numberOfAnts / nearestNeighbourPathLength;
 
-targetPathLength = 122.0;
+targetPathLength = 123.0;
 
 % Initialization
 range = [0 20 0 20];

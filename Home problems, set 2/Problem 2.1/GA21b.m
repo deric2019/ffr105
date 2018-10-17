@@ -10,7 +10,7 @@ tournamentSize = 2;
 mutationProbability = 1 / numberOfCities;
 elitismCount = 1;
 populationSize = 100;
-numberOfGenerations = 1000;
+numberOfGenerations = 10000;
 
 fitnessValues = zeros(populationSize, 1);
 
@@ -74,4 +74,4 @@ for iGeneration = 1:numberOfGenerations
     population = tempPopulation;
 end
 
-fprintf('bestPath = [%s];\n', sprintf('%d ', bestIndividual));
+fprintf('bestPath = %s;\n', mat2str(bestIndividual));
